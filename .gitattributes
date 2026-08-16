@@ -1,0 +1,19 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PowerShell 脚本必须保持 CRLF + UTF-8 BOM:
+#   - BOM 是硬要求。PowerShell 5.1 (Windows 自带的那个) 会把无 BOM 的 .ps1 按系统
+#     ANSI 代码页解读, 脚本里的中文全变乱码, 连引号配对都会崩, 直接无法运行。
+#     Git 本身不会动 BOM, 但请不要用会"顺手去掉 BOM"的编辑器保存。
+#   - eol=crlf 保证在任何平台 clone 出来都是 Windows 原生行尾。
+*.ps1 text eol=crlf
+
+# .bat 同样必须是 CRLF。少了这行会落进上面的 `* text=auto`, 被 git 按 LF 存储,
+# GitHub 的 Download ZIP 与 core.autocrlf=input 的 clone 都会导出 LF 版本;
+# cmd 解析 LF 结尾且含多字节 UTF-8 注释的 .bat 时会字节失步, 双击先蹦出两行
+# "'...' is not recognized as an internal or external command"。
+# 另注: .bat 不能带 UTF-8 BOM (cmd 会把 BOM 当成命令), 这一点 git 管不了, 靠编辑器。
+*.bat text eol=crlf
+
+# 文档统一 LF, 避免跨平台 diff 噪音
+*.md text eol=lf

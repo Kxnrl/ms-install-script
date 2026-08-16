@@ -1,0 +1,21 @@
+# 本地测试产物
+/test/
+/tmp/
+*.log
+
+# 脚本运行时可能落在仓库目录里的东西 (正常情况下都在系统 TEMP, 这里只是兜底)
+steamcmd/
+dotnet-install.ps1
+vc_redist.x64.exe
+*.zip
+
+# 编辑器
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+# Windows
+Thumbs.db
+desktop.ini
