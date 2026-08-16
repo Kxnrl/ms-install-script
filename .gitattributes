@@ -8,12 +8,13 @@
 #   - eol=crlf 保证在任何平台 clone 出来都是 Windows 原生行尾。
 *.ps1 text eol=crlf
 
-# .bat 同样必须是 CRLF。少了这行会落进上面的 `* text=auto`, 被 git 按 LF 存储,
-# GitHub 的 Download ZIP 与 core.autocrlf=input 的 clone 都会导出 LF 版本;
-# cmd 解析 LF 结尾且含多字节 UTF-8 注释的 .bat 时会字节失步, 双击先蹦出两行
-# "'...' is not recognized as an internal or external command"。
-# 另注: .bat 不能带 UTF-8 BOM (cmd 会把 BOM 当成命令), 这一点 git 管不了, 靠编辑器。
-*.bat text eol=crlf
+# 唯一的例外: install.ps1 必须"无 BOM"且保持纯 ASCII。
+# 它是给 `irm ... | iex` 用的 —— irm 把文件内容交给解析器时是一个字符串,
+# BOM (U+FEFF) 会留在字符串开头, 而它不是合法 token: 开头的 <# 就不再被当成注释,
+# 帮助文本会被当代码解析, 报出指向某个中文标点的 "Missing argument in parameter list"。
+# 把 <# 挪到第二行也没用, BOM 会和后面的内容粘成一个 token 被当命令名。
+# 既然不能带 BOM, 它就只能是纯 ASCII, 否则有人下载下来直接运行时中文会乱码。
+
 
 # 文档统一 LF, 避免跨平台 diff 噪音
 *.md text eol=lf
